@@ -20,9 +20,8 @@ PAD_TOKEN = "<pad>"
 
 print("Loading dataset...")
 
-# Load the dataset
-train_iter = IMDB(split='train')
-test_iter = IMDB(split='test')
+# Load the dataset for vocabulary building
+train_iter, test_iter = IMDB(split=('train', 'test'))
 
 print("Building vocabulary...")
 
@@ -46,18 +45,42 @@ def preprocess(text):
 # Collate function for DataLoader
 def collate_batch(batch):
     labels, texts = zip(*batch)
-    labels = torch.tensor([1 if label == "pos" else 0 for label in labels], dtype=torch.int64)
+    labels = torch.tensor([1 if label == 2 else 0 for label in labels], dtype=torch.int64)  # Convert labels to binary
     texts = [torch.tensor(preprocess(text), dtype=torch.int64) for text in texts]
     texts = pad_sequence(texts, batch_first=True, padding_value=vocab[PAD_TOKEN])
     return labels, texts
 
 print("Creating data loaders...")
 
-# Create DataLoaders
-train_iter = IMDB(split='train')
-test_iter = IMDB(split='test')
-train_loader = DataLoader(list(train_iter), batch_size=BATCH_SIZE, collate_fn=collate_batch)
-test_loader = DataLoader(list(test_iter), batch_size=BATCH_SIZE, collate_fn=collate_batch)
+# Reload the dataset for actual data loading
+train_iter, test_iter = IMDB(split=('train', 'test'))
+
+# Convert iterators to lists
+train_data = [(label, text) for label, text in train_iter]
+test_data = [(label, text) for label, text in test_iter]
+
+# Inspect raw data
+def inspect_raw_data(data):
+    for i in range(10):
+        print(f"Sample {i+1}:")
+        print(f"Label: {data[i][0]}, Text: {data[i][1][:100]}")  # Print first 100 characters of the text
+
+inspect_raw_data(train_data)
+
+train_loader = DataLoader(train_data, batch_size=BATCH_SIZE, collate_fn=collate_batch)
+test_loader = DataLoader(test_data, batch_size=BATCH_SIZE, collate_fn=collate_batch)
+
+# Inspect data distribution
+def inspect_data(data):
+    labels = [label for label, _ in data]
+    pos_count = sum(1 for label in labels if label == 2)
+    neg_count = sum(1 for label in labels if label == 1)
+    print(f"Total samples: {len(data)}, Positive samples: {pos_count}, Negative samples: {neg_count}")
+
+#print("Inspecting training data distribution...")
+#inspect_data(train_data)
+#print("Inspecting test data distribution...")
+#inspect_data(test_data)
 
 print("Data loaders created successfully.")
 
