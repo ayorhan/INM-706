@@ -19,3 +19,31 @@
    ```bash
    bash setup.sh
    source venv/bin/activate
+
+### Train Models
+1. Train the baseline model:
+    ```bash
+    python train_baseline_model.py
+
+2. Train the complex model:
+    ```bash
+    python train_complex_model.py
+
+### Run Inference
+1. Run the inference script to predict the sentiment of a new text:
+    ```bash
+    python inference.py
+
+2. To predict the sentiment of custom text, modify the `sample_text` variable in the `inference.py` script:
+    ```bash
+    if __name__ == "__main__":
+    sample_text = "Your custom text here"
+    sentiment, prediction = predict_sentiment(sample_text)
+    print(f"Sentiment prediction for '{sample_text}': {sentiment} ({prediction:.4f})")
+
+3. To use a different model, modify the `MODEL_PATH` variable:
+    ```bash
+    MODEL_PATH = "complex_model.pth"
+
+
+
