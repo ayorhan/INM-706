@@ -1,4 +1,4 @@
-# INM-706 Courswork - Sentiment Analysis with Deep Learning
+# INM-706 Coursework - Sentiment Analysis with Deep Learning
 
 ## Project Structure
 - `dataset/`: Contains the dataset loader script.
