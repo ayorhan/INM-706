@@ -65,7 +65,7 @@ def inspect_raw_data(data):
         print(f"Sample {i+1}:")
         print(f"Label: {data[i][0]}, Text: {data[i][1][:100]}")  # Print first 100 characters of the text
 
-inspect_raw_data(train_data)
+#inspect_raw_data(train_data)
 
 train_loader = DataLoader(train_data, batch_size=BATCH_SIZE, collate_fn=collate_batch)
 test_loader = DataLoader(test_data, batch_size=BATCH_SIZE, collate_fn=collate_batch)
