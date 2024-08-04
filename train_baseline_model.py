@@ -1,9 +1,9 @@
-# train.py
+# train_baseline_model.py
 import torch
 import torch.nn as nn
 import torch.optim as optim
 from torch.utils.data import DataLoader, random_split
-from dataset.dataset_loader import train_loader, test_loader, vocab, collate_batch  # Added collate_batch import
+from dataset.dataset_loader import train_loader, test_loader, vocab, collate_batch
 from models.baseline_model import BaselineModel
 import wandb
 
@@ -40,11 +40,8 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, num_epoch
         train_loss = 0
         train_acc = 0
         for labels, texts in train_loader:
-            #print(f"Labels: {labels}")
-            #print(f"Texts: {texts}")
             optimizer.zero_grad()
             outputs = model(texts).squeeze()
-            #print(f"Model Outputs: {outputs}")
             loss = criterion(outputs, labels.float())
             loss.backward()
             optimizer.step()
@@ -70,6 +67,10 @@ def train_model(model, train_loader, val_loader, criterion, optimizer, num_epoch
         wandb.log({"Train Loss": train_loss, "Train Accuracy": train_acc, "Val Loss": val_loss, "Val Accuracy": val_acc})
         print(f"Epoch {epoch+1}/{num_epochs}, Train Loss: {train_loss:.4f}, Train Accuracy: {train_acc:.4f}, Val Loss: {val_loss:.4f}, Val Accuracy: {val_acc:.4f}")
 
+    # Save the model
+    torch.save(model.state_dict(), "baseline_model.pth")
+    wandb.save("baseline_model.pth")
+
 # Evaluation function
 def evaluate_model(model, test_loader, criterion):
     model.eval()
@@ -78,7 +79,6 @@ def evaluate_model(model, test_loader, criterion):
     with torch.no_grad():
         for labels, texts in test_loader:
             outputs = model(texts).squeeze()
-            #print(f"Model Outputs (Test): {outputs}")
             loss = criterion(outputs, labels.float())
             epoch_loss += loss.item()
             preds = torch.round(outputs)
@@ -86,6 +86,7 @@ def evaluate_model(model, test_loader, criterion):
     epoch_loss /= len(test_loader.dataset)
     epoch_acc /= len(test_loader.dataset)
     print(f"Test Loss: {epoch_loss:.4f}, Test Accuracy: {epoch_acc:.4f}")
+    wandb.log({"Test Loss": epoch_loss, "Test Accuracy": epoch_acc})
 
 if __name__ == "__main__":
     train_model(model, train_loader, val_loader, criterion, optimizer, NUM_EPOCHS)
