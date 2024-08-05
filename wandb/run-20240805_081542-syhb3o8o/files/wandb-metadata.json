@@ -1,0 +1,45 @@
+{
+    "os": "macOS-10.16-x86_64-i386-64bit",
+    "python": "3.12.4",
+    "heartbeatAt": "2024-08-05T05:15:44.966084",
+    "startedAt": "2024-08-05T05:15:42.976829",
+    "docker": null,
+    "cuda": null,
+    "args": [],
+    "state": "running",
+    "program": "/Users/macbook/Projects/706/INM-706/train_baseline_model.py",
+    "codePathLocal": "train_baseline_model.py",
+    "codePath": "train_baseline_model.py",
+    "git": {
+        "remote": "git@github.com:ayorhan/INM-706.git",
+        "commit": "8792fb6a5c80b679a0cc00ab41dfe19519fe523b"
+    },
+    "email": "ardayigithanorhan@gmail.com",
+    "root": "/Users/macbook/Projects/706/INM-706",
+    "host": "macbooks-MacBook-Pro.local",
+    "username": "macbook",
+    "executable": "/opt/anaconda3/bin/python",
+    "cpu_count": 2,
+    "cpu_count_logical": 4,
+    "cpu_freq": {
+        "current": 3100,
+        "min": 3100,
+        "max": 3100
+    },
+    "cpu_freq_per_core": [
+        {
+            "current": 3100,
+            "min": 3100,
+            "max": 3100
+        }
+    ],
+    "disk": {
+        "/": {
+            "total": 233.5667953491211,
+            "used": 189.30339813232422
+        }
+    },
+    "memory": {
+        "total": 16.0
+    }
+}
